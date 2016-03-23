@@ -1,0 +1,13 @@
+CAT=/usr/bin/cat
+
+failedTests.txt: easyFails.txt hardFails.txt expertFails.txt $CAT
+        LOCAL $CAT easyFails.txt hardFails.txt expertFails.txt > failedTests.txt
+
+easyFails.txt: easy.test runTests.sh
+        ./runTests.sh -J 4 easy.test 1>easyFails.txt
+
+hardFails.txt: hard.test runTests.sh
+        ./runTests.sh -J 4 hard.test 1>hardFails.txt
+
+expertFails.txt: expert.test runTests.sh
+        ./runTests.sh -J 4 expert.test 1>expertFails.txt
