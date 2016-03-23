@@ -17,6 +17,7 @@ This will output any lines from FILE for which qqwing's solution differs from su
     exit
 }
 
+# The workhorse function. Compare solutions or look for unsolved cells
 compareSolutions() {
     if [ -n "$1" ]; then
         MYSOLV=$(./sudoku.exe <<< "$1" | tr -d ' ')
@@ -35,9 +36,7 @@ compareSolutions() {
 }
 export -f compareSolutions
 
-
-
-
+# flag handling
 while getopts hsxJ:: FLAGNAME
 do
     case "$FLAGNAME" in
@@ -51,6 +50,7 @@ done
 
 shift $(($OPTIND -1))
 
+# no filename was given
 if [ -z "$1" ]; then
     echo "runTests.sh: missing operand
 
@@ -58,9 +58,7 @@ Try \`runTests.sh -h' for more information."
     exit 1
 fi
 
-
-
-
+# Handle missing commands
 if [ -z "$(command -v ./sudoku.exe)" ]; then
     echo "sudoku.exe not found, did you run make?"
     exit 1;
@@ -71,14 +69,14 @@ if [ -z "$(command -v qqwing)" ]; then
     QQWING=0
 fi
 
-
+# run the tests in parallel or sequentially
 export QQWING
 if [ -n "$SEQUENTIAL" ]; then
     while read LINE; do
         compareSolutions "$LINE"
     done <"$1"
 else
-    # Prefer gnu-parallel, but it's not installed on student machines
+    # Prefer gnu-parallel, but if it's not installed use xargs
     if [ -n "$(command -v parallel)" ]; then
         parallel -d '\n' -j "$CORES" -a "$1" compareSolutions
     else

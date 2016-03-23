@@ -24,16 +24,16 @@
 
 # Internals<a id="sec-2" name="sec-2"></a>
 
--   Refer to the lab5 report for details on the storage and validity
-    of a sudoku puzzle
 -   The solver requires new data structures: sets of values which may
     potentially be held by a cell and sets of values still required by
     the regions (rows, columns, and boxes). These are implemented with
-    unordered<sub>sets</sub> of T.
+    unordered_sets of T.
 -   4 strategies for solving a sudoku are implemented:
-      Note: upon insertion of a value that value is removed from the
+
+      Note: upon insertion of a value, that value is removed from the
     sets of required values for the relevant regions and removed
-    from the sets of potential values of all cells in those regions
+    from the sets of potential values of all cells in those regions.
+
     1.  checkSingularCandidates
         -   This iterates over every cell and checks whether it has only
             a single potential value. If so, then that value is inserted
@@ -55,14 +55,14 @@
     4.  checkPointers
         -   This looks at all candidates for a required value in a
             region. If there are only 2 or 3 candidates and they all
-            inhabit a seoncd region simultaneously, then that value can
+            inhabit a second region simultaneously, then that value can
             be eliminated from every cell in the second region not
             intersecting with the first region.
 
--   One strategy is employed over and over until it cannot add any new
-    information to the puzzle. Then the next strategy has a similar
-    turn. If any subsequent strategy discovers new information then
-    flow will eventually return to first strategy, restarting the
+-   The first strategy is employed over and over until it cannot add any
+    new information to the puzzle. Then the next strategy has a
+    similar turn. If any subsequent strategy discovers new information
+    then flow will immediately return to the first strategy, restarting the
     process.
 
 -   If none of the strategies can provide new information, then a
@@ -100,7 +100,6 @@
     <http://www.sudokuwiki.org>
 -   isValidInsertion() also forces any insertion to obey the rules of
     the puzzle, barring errors from propagating
--   I tested this thoroughly on the puzzles provided in the resources
 -   I wrote a testing script which, with the help of repositories at
     <http://www2.warwick.ac.uk/fac/sci/moac/people/students/peter_cock/python/sudoku>
     <http://magictour.free.fr/sudoku.htm> and verifying against qqwing
@@ -110,7 +109,7 @@
     .test files! It should take <=40 seconds to run on the student
     machines depending on which tests you run (see ./runTests.sh -h
     for details). If you get weird system-created error messages and
-    stuff than you're creating too many threads, both by the script
+    stuff then you're creating too many threads, both by the script
     and the program. Try running with the sequential flag (-s), and if
     that is still being weird, change the solve() in sudoku.cpp to
     solve(false) (see the top of the next section for an explanation).
